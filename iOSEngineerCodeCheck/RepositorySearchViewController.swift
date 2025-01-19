@@ -25,6 +25,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     }
 
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        //searchBarの文字を初期化する
         searchBar.text = ""
         return true
     }
@@ -48,11 +49,13 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
                     }
                 }
             }
+            //タスクを実行する
             currentTask?.resume()
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //画面遷移時に呼ばれる
         if segue.identifier == "Detail" {
             let detailViewController = segue.destination as! RepositoryDetailViewController
             detailViewController.repositorySearchController = self
@@ -73,6 +76,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //セルを選択した時に呼ばれる
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "Detail", sender: self)
     }
