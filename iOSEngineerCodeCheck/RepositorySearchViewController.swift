@@ -40,18 +40,17 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         
         self.searchTerm = searchTerm
         let apiUrl = "https://api.github.com/search/repositories?q=\(searchTerm)"
-        
-        // URL作成時の安全性を確保
         guard let url = URL(string: apiUrl) else { return }
         
-        currentTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data,
-               let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let items = jsonObject["items"] as? [[String: Any]] {
-                self.repositories = items
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+        currentTask = URLSession.shared.dataTask(with: URL(string: apiUrl)!) { (data, response, error) in
+            guard let data = data else { return }
+            guard let jsonObject = try? JSONSerialization.jsonObject(with: data) else { return }
+            guard let obj = jsonObject as? [String: Any] else { return }
+            guard let items = obj["items"] as? [[String: Any]] else { return }
+            
+            self.repositories = items
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
         //タスクを実行する

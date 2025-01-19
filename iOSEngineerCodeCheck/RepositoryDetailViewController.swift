@@ -42,17 +42,18 @@ class RepositoryDetailViewController: UIViewController {
               let repository = repositorySearchController?.repositories[selectedIndex],
               let owner = repository["owner"] as? [String: Any],
               let imageUrlString = owner["avatar_url"] as? String,
-              let url = URL(string: imageUrlString) else {
+              let imageURL = URL(string: imageUrlString) else {
             return
         }
         
         titleLabel.text = repository["full_name"] as? String
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.imageView.image = image
-                }
+        URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+            guard let data = data else { return }
+            let image = UIImage(data: data)
+            guard let image = image else { return }
+            DispatchQueue.main.async {
+                self.imageView.image = image
             }
         }.resume()
     }
