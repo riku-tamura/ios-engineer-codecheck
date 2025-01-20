@@ -28,28 +28,25 @@ class RepositoryDetailViewController: UIViewController {
             return
         }
         
-        languageLabel.text = "Written in \(repository["language"] as? String ?? "")"
-        starsLabel.text = "\(repository["stargazers_count"] as? Int ?? 0) stars"
-        watchersLabel.text = "\(repository["watchers_count"] as? Int ?? 0) watchers"
-        forksLabel.text = "\(repository["forks_count"] as? Int ?? 0) forks"
-        issuesLabel.text = "\(repository["open_issues_count"] as? Int ?? 0) open issues"
-        loadAvatarImage()
+        languageLabel.text = "Written in \(repository.language ?? "不明")"
+        starsLabel.text = "\(repository.stargazersCount) stars"
+        watchersLabel.text = "\(repository.watchersCount) watchers"
+        forksLabel.text = "\(repository.forksCount) forks"
+        issuesLabel.text = "\(repository.openIssuesCount) open issues"
+        loadAvatarImage(for: repository)
     }
     
-    func loadAvatarImage() {
-        
-        guard let selectedIndex = repositorySearchController?.selectedIndex,
-              let repository = repositorySearchController?.repositories[selectedIndex],
-              let owner = repository["owner"] as? [String: Any],
-              let imageUrlString = owner["avatar_url"] as? String,
-              let imageURL = URL(string: imageUrlString) else {
+    func loadAvatarImage(for repository: Repository) {
+        guard let owner = repository.owner,
+              let imageURL = URL(string: owner.avatarURL) else {
             return
         }
         
-        titleLabel.text = repository["full_name"] as? String
+        titleLabel.text = repository.fullName
         
         URLSession.shared.dataTask(with: imageURL) { [weak self] (data, response, error) in
             guard let self = self else { return }
+            if let error = error { return }
             guard let data = data else { return }
             let image = UIImage(data: data)
             guard let image = image else { return }

@@ -12,7 +12,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var repositories: [[String: Any]] = []
+    var repositories: [Repository] = []
     private var currentTask: URLSessionTask?
     private var searchTerm: String = ""
     var selectedIndex: Int?
@@ -44,14 +44,16 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         
         currentTask = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard let self = self else { return }
+            if let error = error { return }
             guard let data = data else { return }
-            guard let jsonObject = try? JSONSerialization.jsonObject(with: data) else { return }
-            guard let obj = jsonObject as? [String: Any] else { return }
-            guard let items = obj["items"] as? [[String: Any]] else { return }
-            
-            self.repositories = items
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+            do {
+                let result = try JSONDecoder().decode(GitHubSearchResult.self, from: data)
+                self.repositories = result.items
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                print("エラー: JSONデコードに失敗しました - \(error.localizedDescription)")
             }
         }
         //タスクを実行する
@@ -74,8 +76,8 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         let repository = repositories[indexPath.row]
-        cell.textLabel?.text = repository["full_name"] as? String ?? ""
-        cell.detailTextLabel?.text = repository["language"] as? String ?? ""
+        cell.textLabel?.text = repository.fullName
+        cell.detailTextLabel?.text = repository.language ?? "不明"
         cell.tag = indexPath.row
         return cell
     }
