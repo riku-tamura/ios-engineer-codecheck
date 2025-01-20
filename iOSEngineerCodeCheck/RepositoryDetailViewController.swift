@@ -48,7 +48,8 @@ class RepositoryDetailViewController: UIViewController {
         
         titleLabel.text = repository["full_name"] as? String
         
-        URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+        URLSession.shared.dataTask(with: imageURL) { [weak self] (data, response, error) in
+            guard let self = self else { return }
             guard let data = data else { return }
             let image = UIImage(data: data)
             guard let image = image else { return }
