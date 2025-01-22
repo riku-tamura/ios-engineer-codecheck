@@ -39,7 +39,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         }
         
         self.searchTerm = searchTerm
-        let apiUrl = "https://api.github.com/search/repositories?q=\(searchTerm)"
+        let apiUrl = "\(GitHubAPI.searchURL)\(searchTerm)"
         guard let url = URL(string: apiUrl) else { return }
         
         currentTask = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
