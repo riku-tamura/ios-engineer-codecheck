@@ -23,17 +23,17 @@ class RepositoryDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let selectedIndex = repositorySearchController?.selectedIndex,
-              let repository = repositorySearchController?.repositories[selectedIndex] else {
-            return
-        }
-        
-        languageLabel.text = "Written in \(repository.language ?? "不明")"
-        starsLabel.text = "\(repository.stargazersCount) stars"
-        watchersLabel.text = "\(repository.watchersCount) watchers"
-        forksLabel.text = "\(repository.forksCount) forks"
-        issuesLabel.text = "\(repository.openIssuesCount) open issues"
-        loadAvatarImage(for: repository)
+//        guard let selectedIndex = repositorySearchController?.selectedIndex,
+//              let repository = repositorySearchController?.repositories[selectedIndex] else {
+//            return
+//        }
+//        
+//        languageLabel.text = "Written in \(repository.language ?? "不明")"
+//        starsLabel.text = "\(repository.stargazersCount) stars"
+//        watchersLabel.text = "\(repository.watchersCount) watchers"
+//        forksLabel.text = "\(repository.forksCount) forks"
+//        issuesLabel.text = "\(repository.openIssuesCount) open issues"
+//        loadAvatarImage(for: repository)
     }
     
     func loadAvatarImage(for repository: Repository) {

@@ -12,15 +12,16 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var repositories: [Repository] = []
-    private var currentTask: URLSessionTask?
-    private var searchTerm: String = ""
-    var selectedIndex: Int?
+    private let repositorySearch = RepositorySearchViewModel()
+    private var repositories: [Repository] = []
+    private var selectedRepository: Repository?
+    private let placeholderText = "GitHubのリポジトリを検索できるよー"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.text = "GitHubのリポジトリを検索できるよー"
+        searchBar.text = ""
         searchBar.delegate = self
+        searchBar.placeholder = placeholderText // プレースホルダーテキストを設定
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
@@ -29,35 +30,49 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         return true
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        currentTask?.cancel()
-    }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchTerm = searchBar.text, !searchTerm.isEmpty else {
+        // 検索クエリが空でないことを確認
+        guard let query = searchBar.text, !query.isEmpty else {
+            self.showErrorAlert(message: RepositoryServiceError.queryMissing.localizedDescription)
             return
         }
         
-        self.searchTerm = searchTerm
-        let apiUrl = "\(GitHubAPI.searchURL)\(searchTerm)"
-        guard let url = URL(string: apiUrl) else { return }
+        // クエリがスペースだけの場合、エラーを表示
+        if query.trimmingCharacters(in: .whitespaces).isEmpty {
+            self.showErrorAlert(message: RepositoryServiceError.invalidQuery.localizedDescription)
+            return
+        }
         
-        currentTask = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let self = self else { return }
-            if let error = error { return }
-            guard let data = data else { return }
-            do {
-                let result = try JSONDecoder().decode(GitHubSearchResult.self, from: data)
-                self.repositories = result.items
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+        // キーボードを閉じる
+        searchBar.endEditing(true)
+        
+        // 検索クエリをURLで使用できる形式にエンコード
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            showErrorAlert(message: RepositoryServiceError.queryEncodingFailed.localizedDescription)
+            return
+        }
+        
+        // リポジトリデータを取得
+        repositorySearch.fetchRepositories(query: encodedQuery) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let repositories):
+                    // データソースを更新し、テーブルビューをリロード
+                    self?.repositories = repositories
+                    self?.tableView.reloadData()
+                case .failure(let error):
+                    // エラーメッセージをアラートで表示
+                    self?.showErrorAlert(message: error.localizedDescription)
                 }
-            } catch {
-                print("エラー: JSONデコードに失敗しました - \(error.localizedDescription)")
             }
         }
-        //タスクを実行する
-        currentTask?.resume()
+    }
+    
+    private func showErrorAlert(message: String) {
+        // エラーメッセージを表示するアラートを作成して表示
+        let alert = UIAlertController(title: "エラー", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,7 +99,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //セルを選択した時に呼ばれる
-        selectedIndex = indexPath.row
+        selectedRepository = repositories[indexPath.row]
         performSegue(withIdentifier: "Detail", sender: self)
     }
 }
