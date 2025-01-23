@@ -16,12 +16,15 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     private var repositories: [Repository] = []
     private var selectedRepository: Repository?
     private let placeholderText = "GitHubのリポジトリを検索できるよー"
+    private var loadingIndicator: LoadingIndicatorView!
+    private var isSearching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.text = ""
         searchBar.delegate = self
         searchBar.placeholder = placeholderText // プレースホルダーテキストを設定
+        loadingIndicator = LoadingIndicatorView() // ローディングインジケーターの初期化
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
@@ -46,6 +49,12 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         // キーボードを閉じる
         searchBar.endEditing(true)
         
+        // リクエスト中のフラグをオンにする
+        isSearching = true
+        
+        // ローディング中のアニメーションを開始
+        loadingIndicator.startAnimating()
+        
         // 検索クエリをURLで使用できる形式にエンコード
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             showErrorAlert(message: RepositoryServiceError.queryEncodingFailed.localizedDescription)
@@ -55,6 +64,9 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         // リポジトリデータを取得
         repositorySearch.fetchRepositories(query: encodedQuery) { [weak self] result in
             DispatchQueue.main.async {
+                // ローディングを停止し、リクエスト中フラグを解除
+                self?.loadingIndicator.stopAnimating()
+                self?.isSearching = false
                 switch result {
                 case .success(let repositories):
                     // データソースを更新し、テーブルビューをリロード
