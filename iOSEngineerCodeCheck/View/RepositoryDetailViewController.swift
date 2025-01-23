@@ -39,18 +39,45 @@ class RepositoryDetailViewController: UIViewController {
         setupAvatarImage(from: viewModel.avatarURL)
     }
     
-    private func setupAvatarImage(from url: URL?) {
-        guard let url = url else { return }
-        
-        // 非同期で画像を取得
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            DispatchQueue.main.async {
-                if let data = data, let image = UIImage(data: data) {
-                    self?.imageView.image = image
-                } else {
-
+    private func setupAvatarImage(from avatarURL: URL?) {
+        if let url = avatarURL {
+            URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+                DispatchQueue.main.async {
+                    if let data = data, let image = UIImage(data: data) {
+                        self?.imageView.image = image
+                    } else {
+                        self?.handleImageDownloadError() // 画像ダウンロード失敗時の処理
+                    }
                 }
-            }
-        }.resume()
+            }.resume()
+        } else {
+            handleImageDownloadError() // 画像URLが無い場合の処理
+        }
+    }
+    
+    private func handleImageDownloadError() {
+        // 画像ダウンロード失敗時にエラーマークを表示
+        imageView.image = UIImage(systemName: "xmark.circle")
+        imageView.tintColor = .systemRed
+        showImageDownloadError() // エラーメッセージ表示
+    }
+    
+    private func showImageDownloadError() {
+        // 画像ダウンロードエラーメッセージを表示
+        let errorMessage = UILabel()
+        errorMessage.text = "画像のダウンロードに失敗しました"
+        errorMessage.textColor = .systemRed
+        errorMessage.font = UIFont.systemFont(ofSize: 14)
+        errorMessage.textAlignment = .center
+        errorMessage.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(errorMessage)
+        
+        // エラーメッセージのレイアウト設定
+        NSLayoutConstraint.activate([
+            errorMessage.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            errorMessage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            errorMessage.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.9)
+        ])
     }
 }
