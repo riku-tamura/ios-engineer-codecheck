@@ -102,15 +102,22 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         
         // リポジトリの名前を設定
         cell.textLabel?.text = repository.fullName
+
+        // ダークモードとライトモードに対応するテキストカラー
+        let textColor = UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? .white : .black
+        }
+        cell.textLabel?.textColor = textColor
+        cell.detailTextLabel?.textColor = textColor
         
         // 言語を設定
         let languageString = "言語: \(repository.language ?? "不明")"
-        let languageAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.black]
+        let languageAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: textColor]
         let attributedLanguageString = NSAttributedString(string: languageString, attributes: languageAttributes)
         
         // スターの数を設定するためのアトリビュート文字列を作成
         let starImage = NSTextAttachment()
-        starImage.image = UIImage(systemName: "star")
+        starImage.image = UIImage(systemName: "star")?.withTintColor(textColor, renderingMode: .alwaysOriginal)
         let starImageString = NSAttributedString(attachment: starImage)
         let starCountString = NSMutableAttributedString(string: " \(repository.stargazersCount)")
         starCountString.insert(starImageString, at: 0)
@@ -125,6 +132,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         
         return cell
     }
+
         
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 選択されたリポジトリを取得
