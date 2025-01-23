@@ -98,12 +98,33 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepoCell") ?? UITableViewCell(style: .subtitle, reuseIdentifier: "RepoCell")
         let repository = repositories[indexPath.row]
+        
+        // リポジトリの名前を設定
         cell.textLabel?.text = repository.fullName
-        cell.detailTextLabel?.text = "言語: \(repository.language ?? "不明")"
-
+        
+        // 言語を設定
+        let languageString = "言語: \(repository.language ?? "不明")"
+        let languageAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.black]
+        let attributedLanguageString = NSAttributedString(string: languageString, attributes: languageAttributes)
+        
+        // スターの数を設定するためのアトリビュート文字列を作成
+        let starImage = NSTextAttachment()
+        starImage.image = UIImage(systemName: "star")
+        let starImageString = NSAttributedString(attachment: starImage)
+        let starCountString = NSMutableAttributedString(string: " \(repository.stargazersCount)")
+        starCountString.insert(starImageString, at: 0)
+        
+        // 言語とスターの数を結合するアトリビュート文字列を作成
+        let combinedString = NSMutableAttributedString(attributedString: attributedLanguageString)
+        combinedString.append(NSAttributedString(string: " "))
+        combinedString.append(starCountString)
+        
+        // detailTextLabelのアトリビュート文字列を設定
+        cell.detailTextLabel?.attributedText = combinedString
+        
         return cell
     }
-    
+        
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 選択されたリポジトリを取得
         let selectedRepository = repositories[indexPath.row]
