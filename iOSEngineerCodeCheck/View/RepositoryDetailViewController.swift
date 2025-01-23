@@ -36,6 +36,17 @@ class RepositoryDetailViewController: UIViewController {
         forksLabel.text = viewModel.forks
         issuesLabel.text = viewModel.openIssues
         
+        // ダークモードとライトモードに対応するラベルのテキストカラー
+        let textColor = UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? .white : .black
+        }
+        titleLabel.textColor = textColor
+        languageLabel.textColor = textColor
+        starsLabel.textColor = textColor
+        watchersLabel.textColor = textColor
+        forksLabel.textColor = textColor
+        issuesLabel.textColor = textColor
+        
         // アバター画像の設定
         setupAvatarImage(from: viewModel.avatarURL)
     }
