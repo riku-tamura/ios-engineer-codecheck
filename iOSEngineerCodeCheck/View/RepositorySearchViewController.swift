@@ -27,12 +27,6 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
         loadingIndicator = LoadingIndicatorView() // ローディングインジケーターの初期化
     }
     
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        //searchBarの文字を初期化する
-        searchBar.text = ""
-        return true
-    }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         // 検索クエリが空でないことを確認
         guard let query = searchBar.text, !query.isEmpty else {
