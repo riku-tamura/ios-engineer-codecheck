@@ -45,6 +45,10 @@ class RepositoryDetailViewModel {
     var openIssues: String {
         return "\(repository.openIssuesCount) open issues"
     }
+    // リポジトリの URL
+    var htmlURL: String {
+        return repository.htmlURL
+    }
     
     // アバター画像の URL
     var avatarURL: URL? {
