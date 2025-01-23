@@ -76,13 +76,14 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //画面遷移時に呼ばれる
-        if segue.identifier == "Detail" {
-            if let detailViewController = segue.destination as? RepositoryDetailViewController {
-                detailViewController.repositorySearchController = self
-            }
+        if segue.identifier == "Detail",
+           let repositoryDetailVC = segue.destination as? RepositoryDetailViewController,
+           let repository = sender as? Repository {
+            let viewModel = RepositoryDetailViewModel(repository: repository)
+            repositoryDetailVC.viewModel = viewModel
         }
     }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return repositories.count
@@ -98,8 +99,8 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //セルを選択した時に呼ばれる
-        selectedRepository = repositories[indexPath.row]
-        performSegue(withIdentifier: "Detail", sender: self)
+        // 選択されたリポジトリを取得
+        let selectedRepository = repositories[indexPath.row]
+        performSegue(withIdentifier: "Detail", sender: selectedRepository) // 選択したリポジトリを渡す
     }
 }
