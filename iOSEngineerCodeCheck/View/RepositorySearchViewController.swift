@@ -96,11 +96,11 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RepoCell") ?? UITableViewCell(style: .subtitle, reuseIdentifier: "RepoCell")
         let repository = repositories[indexPath.row]
         cell.textLabel?.text = repository.fullName
-        cell.detailTextLabel?.text = repository.language ?? "不明"
-        cell.tag = indexPath.row
+        cell.detailTextLabel?.text = "言語: \(repository.language ?? "不明")"
+
         return cell
     }
     
