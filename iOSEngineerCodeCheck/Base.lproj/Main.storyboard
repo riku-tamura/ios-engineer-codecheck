@@ -77,7 +77,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="4q1-pG-WSB">
-                                <rect key="frame" x="20" y="443.5" width="335" height="33.5"/>
+                                <rect key="frame" x="20" y="453.5" width="335" height="33.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" systemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -130,9 +130,8 @@
                             <constraint firstItem="Iim-eb-8Ad" firstAttribute="leading" secondItem="srK-fe-i1b" secondAttribute="leading" constant="20" id="EMR-2C-CyU"/>
                             <constraint firstItem="4q1-pG-WSB" firstAttribute="trailing" secondItem="Iim-eb-8Ad" secondAttribute="trailing" id="Emf-tn-Zup"/>
                             <constraint firstItem="4q1-pG-WSB" firstAttribute="leading" secondItem="oOe-O2-3RS" secondAttribute="leading" id="FFy-rs-ziJ"/>
-                            <constraint firstItem="4q1-pG-WSB" firstAttribute="top" secondItem="Iim-eb-8Ad" secondAttribute="bottom" constant="20" id="G2L-KM-330"/>
                             <constraint firstItem="srK-fe-i1b" firstAttribute="trailing" secondItem="Iim-eb-8Ad" secondAttribute="trailing" constant="20" id="IgU-EN-fM3"/>
-                            <constraint firstItem="4q1-pG-WSB" firstAttribute="top" secondItem="Iim-eb-8Ad" secondAttribute="bottom" constant="20" id="KXZ-89-AOH"/>
+                            <constraint firstItem="4q1-pG-WSB" firstAttribute="top" secondItem="Iim-eb-8Ad" secondAttribute="bottom" constant="30" id="KXZ-89-AOH"/>
                             <constraint firstItem="oOe-O2-3RS" firstAttribute="top" secondItem="Iim-eb-8Ad" secondAttribute="bottom" constant="70" id="KvY-tO-mz4"/>
                             <constraint firstItem="srK-fe-i1b" firstAttribute="trailing" secondItem="oOe-O2-3RS" secondAttribute="trailing" constant="30" id="hiR-fw-qUc"/>
                             <constraint firstItem="Iim-eb-8Ad" firstAttribute="centerY" secondItem="srK-fe-i1b" secondAttribute="centerY" multiplier="0.7" id="ruB-l0-4VM"/>
