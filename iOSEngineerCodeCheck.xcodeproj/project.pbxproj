@@ -50,6 +50,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		B46D2D982D426EB900BBDCA8 /* Other */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Other; sourceTree = "<group>"; };
 		B480783D2D414ECB00612D6D /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
 		B480783E2D414EE200612D6D /* View */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = View; sourceTree = "<group>"; };
 		B480783F2D414EFA00612D6D /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 			children = (
 				BFD945DE244DC5E80012785A /* AppDelegate.swift */,
 				BFD945E0244DC5E80012785A /* SceneDelegate.swift */,
+				B46D2D982D426EB900BBDCA8 /* Other */,
 				B480783F2D414EFA00612D6D /* ViewModel */,
 				B480783E2D414EE200612D6D /* View */,
 				B480783D2D414ECB00612D6D /* Model */,
@@ -150,6 +152,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				B46D2D982D426EB900BBDCA8 /* Other */,
 				B480783D2D414ECB00612D6D /* Model */,
 				B480783E2D414EE200612D6D /* View */,
 				B480783F2D414EFA00612D6D /* ViewModel */,
