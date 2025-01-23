@@ -23,6 +23,7 @@ class RepositoryDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTitleLabelTap() // タイトルラベルにタップジェスチャーを設定
     }
     
     private func setupUI() {
@@ -79,5 +80,20 @@ class RepositoryDetailViewController: UIViewController {
             errorMessage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             errorMessage.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.9)
         ])
+    }
+    
+    private func setupTitleLabelTap() {
+        // タイトルラベルにタップジェスチャーを追加し、リポジトリの詳細ページを開く
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInBrowser))
+        titleLabel.isUserInteractionEnabled = true
+        titleLabel.addGestureRecognizer(tapGesture)
+        titleLabel.textColor = UIColor.systemBlue
+    }
+    
+    @objc private func openInBrowser() {
+        // タイトルラベルがタップされた場合、ブラウザでリポジトリのURLを開く
+        if let htmlURL = viewModel?.htmlURL, let url = URL(string: htmlURL) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }

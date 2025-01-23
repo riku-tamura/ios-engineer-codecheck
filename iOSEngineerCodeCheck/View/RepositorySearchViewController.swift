@@ -65,6 +65,7 @@ class RepositorySearchViewController: UITableViewController, UISearchBarDelegate
                 case .success(let repositories):
                     // データソースを更新し、テーブルビューをリロード
                     self?.repositories = repositories
+                    print(self?.repositories)
                     self?.tableView.reloadData()
                 case .failure(let error):
                     // エラーメッセージをアラートで表示
